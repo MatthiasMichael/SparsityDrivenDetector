@@ -19,7 +19,7 @@ environment = [
 ]
 
 sdd = [
-	"CPLEX/12.7.1@rtcv/extern", 
+	"CPLEX/12.7.1@MatthiasMichael/stable", 
 	"opencv/3.4.5@conan/stable"
 ]
 
