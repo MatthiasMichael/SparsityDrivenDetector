@@ -8,7 +8,7 @@ class ShapeFromSilhouetteCudaConan(ConanFile):
     version = "HEAD"
     settings = "os", "compiler", "build_type", "arch"
     generators = "cmake"
-    requires = deps.all
+    requires = deps.get(deps.environment, deps.shape_from_silhouette_common, deps.shape_from_silhouette)
 
     def build(self):
         cmake = CMake(self)

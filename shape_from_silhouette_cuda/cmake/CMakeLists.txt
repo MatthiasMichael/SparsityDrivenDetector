@@ -9,7 +9,11 @@ MESSAGE("Flags ${PROJECT_NAME}:")
 SHOW_CMAKE_CXX_FLAGS()
 
 INCLUDE_DIRECTORIES(
-	${LIB_INCLUDE_DIRS}
+	../include 
+	../../environment/include
+	../../timer/include
+	../../shape_from_silhouette_common/include
+	../../utility/include
 )
 
 SET( INCS
