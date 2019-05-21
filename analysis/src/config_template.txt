@@ -1,0 +1,36 @@
+scene={}
+
+[grid]
+distX={}
+distY={}
+height={}
+
+[image]
+width={}
+height={}
+
+[template]
+{}
+
+[input]
+firstFrame={}
+
+[detector]
+optimizationType={}
+maxMergingDistance={}
+
+[optimization]
+advancedInitialization={}
+rootAlg={}
+
+[sfs.init]
+computeLocation={}
+voxelSize={}
+
+[sfs.param]
+minPartSegmentation={}
+maxClusterDistance = {}
+
+[debug]
+skipSDDBuild = 0
+skipSFSBuild = 0

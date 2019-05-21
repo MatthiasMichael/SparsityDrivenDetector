@@ -1,0 +1,43 @@
+CMAKE_MINIMUM_REQUIRED( VERSION 3.0 )
+
+PROJECT( ApplicationTimer )
+
+INCLUDE(${CMAKE_CURRENT_BINARY_DIR}/conanbuildinfo.cmake)
+CONAN_BASIC_SETUP()
+
+MESSAGE("Flags ${PROJECT_NAME}:")
+SHOW_CMAKE_CXX_FLAGS()
+
+INCLUDE_DIRECTORIES(
+	../include
+ )
+
+SET( INCLUDE_FILES
+	../include/${PROJECT_NAME}.h
+	../include/TimingEntry.h
+	../include/TimingSession.h
+	../include/TimingStream.h
+)
+
+
+SET( SOURCE_FILES
+	../src/${PROJECT_NAME}.cpp
+	../src/TimingEntry.cpp
+	../src/TimingSession.cpp
+	../src/TimingStream.cpp
+)
+
+
+ADD_LIBRARY ( ${PROJECT_NAME} STATIC
+	${INCLUDE_FILES}
+	${SOURCE_FILES}
+)
+
+CONAN_TARGET_LINK_LIBRARIES(${PROJECT_NAME})
+
+SET_PROPERTY( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Utility")
+
+SET_PROPERTY(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 17)
+SET_PROPERTY(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD_REQUIRED ON)
+
+SOURCE_GROUP( "Resource Files" FILES ${RESOURCE_FILES} )

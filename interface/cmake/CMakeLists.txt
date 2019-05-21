@@ -1,0 +1,68 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
+
+PROJECT( Interface )
+
+INCLUDE(${CMAKE_CURRENT_BINARY_DIR}/conanbuildinfo.cmake)
+CONAN_BASIC_SETUP()
+
+MESSAGE("Flags ${PROJECT_NAME}:")
+SHOW_CMAKE_CXX_FLAGS()
+
+FIND_PACKAGE( Qt5Core )
+FIND_PACKAGE( Qt5Widgets )
+FIND_PACKAGE( Qt5Gui )
+FIND_PACKAGE( Qt5OpenGL )
+
+SET( CMAKE_AUTOMOC ON )
+SET( CMAKE_AUTOUIC ON )
+
+SET( CMAKE_AUTOUIC_SEARCH_PATHS ../ui )
+
+INCLUDE_DIRECTORIES(
+	${LIB_INCLUDE_DIRS}
+	${CMAKE_CURRENT_BINARY_DIR}
+)
+
+SET( INCLUDE_FILES
+	../include/MainWindow.h
+)
+
+SET( SOURCE_FILES
+	../src/MainWindow.cpp
+)
+
+SET( UI_FILES
+	../ui/MainWindow.ui
+)
+
+ADD_LIBRARY( ${PROJECT_NAME} STATIC
+	${INCLUDE_FILES}
+	${SOURCE_FILES}
+	${UI_FILES}
+)
+
+CONAN_TARGET_LINK_LIBRARIES(${PROJECT_NAME})
+
+TARGET_LINK_LIBRARIES( ${PROJECT_NAME}
+	Qt5::Core
+	Qt5::Gui
+	Qt5::OpenGL
+	Qt5::Widgets
+	Glu32
+	Opengl32
+	SparsityDrivenDetector
+	Environment
+	ApplicationTimer
+	ShapeFromSilhouette_Common
+	ShapeFromSilhouette_Bridge
+	Fusion
+	Visualization_Environment
+	Visualization_ShapeFromSilhouette
+	Visualization_SparsityDrivenDetector
+	Visualization_Fusion
+)
+
+SET_PROPERTY( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Application" )
+
+SET_PROPERTY( TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 17 )
+SET_PROPERTY( TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD_REQUIRED ON )

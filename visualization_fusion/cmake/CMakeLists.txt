@@ -1,0 +1,56 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
+
+PROJECT( Visualization_Fusion )
+
+INCLUDE(${CMAKE_CURRENT_BINARY_DIR}/conanbuildinfo.cmake)
+CONAN_BASIC_SETUP()
+
+MESSAGE("Flags ${PROJECT_NAME}:")
+SHOW_CMAKE_CXX_FLAGS()
+
+FIND_PACKAGE( Qt5Core )
+FIND_PACKAGE( Qt5Widgets )
+FIND_PACKAGE( Qt5Gui )
+FIND_PACKAGE( Qt5OpenGL )
+
+INCLUDE_DIRECTORIES(
+	${LIB_INCLUDE_DIRS}
+	${CMAKE_CURRENT_BINARY_DIR}
+)
+
+SET( INCLUDE_FILES
+	../include/DisplayDescriptors_Fusion.h
+	../include/DisplayableFusion.h
+)
+
+SET( SOURCE_FILES
+	../src/DisplayableFusion.cpp
+)
+
+ADD_LIBRARY( ${PROJECT_NAME} STATIC
+	${INCLUDE_FILES}
+	${SOURCE_FILES}
+)
+
+CONAN_TARGET_LINK_LIBRARIES(${PROJECT_NAME})
+
+TARGET_LINK_LIBRARIES( ${PROJECT_NAME}
+	Qt5::Core
+	Qt5::Gui
+	Qt5::OpenGL
+	Qt5::Widgets
+	Glu32
+	Opengl32
+	ShapeFromSilhouette_Common
+	Environment
+	ApplicationTimer
+	SparsityDrivenDetector
+	Fusion
+	Visualization_Environment
+	Visualization_ShapeFromSilhouette
+)
+
+SET_PROPERTY( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Visualization" )
+
+SET_PROPERTY( TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 17 )
+SET_PROPERTY( TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD_REQUIRED ON )
