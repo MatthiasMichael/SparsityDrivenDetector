@@ -27,6 +27,13 @@ CPLEX is proprietary software but can be used freely for academic and research p
     conan export . MatthiasMichael/stable
     conan install CPLEX/12.7.1@MatthiasMichael/stable --build missing
     
+For conan to find Qt I would suggest adding it to the `CMAKE_PREFIX_PATH` with the lines
+
+    [env]
+    CMAKE_PREFIX_PATH=C:/SDKs/Qt/5.9/msvc2017_64
+    
+in the conan profile you are using. Of course the path should be pointing to your respective Qt installation.
+    
 ## Dependencies
 Any other external dependecy should automatically managed by conan. This project however depends on several other libraries that are provided in my other repositories. These are:
 * NamedType
