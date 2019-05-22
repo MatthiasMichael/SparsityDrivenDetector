@@ -2,9 +2,6 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
 
 PROJECT( Executables )
 
-INCLUDE(${CMAKE_CURRENT_BINARY_DIR}/conanbuildinfo.cmake)
-CONAN_BASIC_SETUP()
-
 MESSAGE("Flags ${PROJECT_NAME}:")
 SHOW_CMAKE_CXX_FLAGS()
 
@@ -16,7 +13,21 @@ FIND_PACKAGE( Qt5Sql )
 
 INCLUDE_DIRECTORIES(
 	../include
-	${LIB_INCLUDE_DIRS}
+	../../controller/include
+	../../environment/include
+	../../experiment/include
+	../../fusion/include
+	../../interface/include
+	../../shape_from_silhouette_bridge/include
+	../../shape_from_silhouette_common/include
+	../../sparsity_driven_detector/include
+	../../timer/include
+	../../unreal_input/include
+	../../utility/include
+	../../visualization_environment/include
+	../../visualization_fusion/include
+	../../visualization_shape_from_silhouette/include
+	../../visualization_sparsity_driven_detector/include
 	${CMAKE_CURRENT_BINARY_DIR}
 )
 
@@ -40,29 +51,39 @@ SET( COMMON_FILES
 )
 
 SET( COMMON_LIBRARIES
+	ApplicationTimer
+	Controller
+	Environment
+	Experiment
+	Fusion
+	Interface
+	ShapeFromSilhouette
+	ShapeFromSilhouette_Bridge
+	ShapeFromSilhouette_Common
+	ShapeFromSilhouette_Cuda
+	SparsityDrivenDetector
+	UnrealInput
+	Visualization_Environment
+	Visualization_Fusion
+	Visualization_ShapeFromSilhouette
+	Visualization_SparsityDrivenDetector
+	Glu32
+	Opengl32
 	Qt5::Core
 	Qt5::Gui
 	Qt5::OpenGL
 	Qt5::Widgets
 	Qt5::Sql
-	Glu32
-	Opengl32
-	SparsityDrivenDetector
-	UnrealInput
-	Environment
-	Fusion
-	Visualization_Fusion
-	Visualization_Environment
-	Visualization_SparsityDrivenDetector
-	Controller
-	Experiment
-	ApplicationTimer
-	ShapeFromSilhouette_Common
-	ShapeFromSilhouette_Bridge
-	ShapeFromSilhouette
-	ShapeFromSilhouette_Cuda
-	Visualization_ShapeFromSilhouette
-	Interface
+	CONAN_PKG::CPLEX
+	CONAN_PKG::Geometry
+	CONAN_PKG::OsgVisualization
+	CONAN_PKG::Roi3DF
+	CONAN_PKG::boost_filesystem
+	CONAN_PKG::boost_program_options
+	CONAN_PKG::ffmpeg
+	CONAN_PKG::libzip
+	CONAN_PKG::opencv
+	CONAN_PKG::sqlite3
 )
 
 MACRO(ADD_EXE_PROJECT EXE_PROJECT_NAME)

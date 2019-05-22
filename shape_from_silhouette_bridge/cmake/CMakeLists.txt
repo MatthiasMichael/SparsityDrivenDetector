@@ -2,14 +2,17 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
 
 PROJECT( ShapeFromSilhouette_Bridge LANGUAGES CXX CUDA )
 
-INCLUDE(${CMAKE_CURRENT_BINARY_DIR}/conanbuildinfo.cmake)
-CONAN_BASIC_SETUP()
-
 MESSAGE("Flags ${PROJECT_NAME}:")
 SHOW_CMAKE_CXX_FLAGS()
 
 INCLUDE_DIRECTORIES(
-	${LIB_INCLUDE_DIRS}
+	../include 
+	../../environment/include
+	../../shape_from_silhouette/include
+	../../shape_from_silhouette_common/include
+	../../shape_from_silhouette_cuda/include
+	../../timer/include
+	../../utility/include
 )
 
 SET( INCS
@@ -30,14 +33,17 @@ ADD_LIBRARY ( ${PROJECT_NAME} STATIC
 	${SRCS}
 )
 
-CONAN_TARGET_LINK_LIBRARIES(${PROJECT_NAME})
-
 TARGET_LINK_LIBRARIES( ${PROJECT_NAME}
 	ApplicationTimer
 	Environment
-	ShapeFromSilhouette_Common
 	ShapeFromSilhouette
+	ShapeFromSilhouette_Common
 	ShapeFromSilhouette_Cuda
+	CONAN_PKG::Geometry
+	CONAN_PKG::Roi3DF
+	CONAN_PKG::boost_filesystem
+	CONAN_PKG::libzip
+	CONAN_PKG::opencv
 )
 
 SET_PROPERTY( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Algorithms/ShapeFromSilhouette")

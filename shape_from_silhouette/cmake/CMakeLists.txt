@@ -2,9 +2,6 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
 
 PROJECT( ShapeFromSilhouette )
 
-INCLUDE(${CMAKE_CURRENT_BINARY_DIR}/conanbuildinfo.cmake)
-CONAN_BASIC_SETUP()
-
 MESSAGE("Flags ${PROJECT_NAME}:")
 SHOW_CMAKE_CXX_FLAGS()
 
@@ -12,7 +9,11 @@ FIND_PACKAGE( Qt5Core )
 FIND_PACKAGE( Qt5Gui )
 
 INCLUDE_DIRECTORIES(
-	${LIB_INCLUDE_DIRS}
+	../include
+	../../environment/include
+	../../shape_from_silhouette_common/include
+	../../timer/include
+	../../utility/include
 )
 
 SET( INCLUDE_FILES
@@ -35,14 +36,17 @@ ADD_LIBRARY(${PROJECT_NAME} STATIC
 	${SOURCE_FILES}
 )
 
-CONAN_TARGET_LINK_LIBRARIES(${PROJECT_NAME})
-
 TARGET_LINK_LIBRARIES(${PROJECT_NAME}
-	Qt5::Core
-	Qt5::Gui
 	ApplicationTimer
 	Environment
 	ShapeFromSilhouette_Common
+	Qt5::Core
+	Qt5::Gui
+	CONAN_PKG::Geometry
+	CONAN_PKG::Roi3DF
+	CONAN_PKG::boost_filesystem
+	CONAN_PKG::libzip
+	CONAN_PKG::opencv
 )
 
 SET_PROPERTY( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Algorithms/ShapeFromSilhouette" )

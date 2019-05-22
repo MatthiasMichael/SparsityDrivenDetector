@@ -2,9 +2,6 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
 
 PROJECT( UnrealInput )
 
-INCLUDE(${CMAKE_CURRENT_BINARY_DIR}/conanbuildinfo.cmake)
-CONAN_BASIC_SETUP()
-
 MESSAGE("Flags ${PROJECT_NAME}:")
 SHOW_CMAKE_CXX_FLAGS()
 
@@ -12,7 +9,10 @@ FIND_PACKAGE( Qt5Core )
 FIND_PACKAGE( Qt5Sql )
 
 INCLUDE_DIRECTORIES(
-	${LIB_INCLUDE_DIRS}
+	../include
+	../../environment/include
+	../../timer/include
+	../../utility/include
 )
 
 SET( INCLUDE_FILES_OTHER
@@ -77,13 +77,15 @@ ADD_LIBRARY( ${PROJECT_NAME} STATIC
 	${SOURCE_FILES}
 )
 
-CONAN_TARGET_LINK_LIBRARIES(${PROJECT_NAME})
-
 TARGET_LINK_LIBRARIES( ${PROJECT_NAME}
+	ApplicationTimer
+	Environment
 	Qt5::Core
 	Qt5::Sql
-	Environment
-	ApplicationTimer
+	CONAN_PKG::opencv
+	CONAN_PKG::ffmpeg
+	CONAN_PKG::Geometry
+	CONAN_PKG::sqlite3
 )
 
 SOURCE_GROUP( "Header Files\\CoordinateSystems" FILES ${INCLUDE_FILES_COORDINATE_SYSTEMS} )

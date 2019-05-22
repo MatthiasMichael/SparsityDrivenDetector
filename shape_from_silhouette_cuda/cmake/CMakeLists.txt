@@ -2,17 +2,14 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
 
 PROJECT( ShapeFromSilhouette_Cuda LANGUAGES CXX CUDA )
 
-INCLUDE(${CMAKE_CURRENT_BINARY_DIR}/conanbuildinfo.cmake)
-CONAN_BASIC_SETUP()
-
 MESSAGE("Flags ${PROJECT_NAME}:")
 SHOW_CMAKE_CXX_FLAGS()
 
 INCLUDE_DIRECTORIES(
 	../include 
 	../../environment/include
-	../../timer/include
 	../../shape_from_silhouette_common/include
+	../../timer/include
 	../../utility/include
 )
 
@@ -63,12 +60,15 @@ TARGET_COMPILE_OPTIONS(${PROJECT_NAME} PRIVATE
 	$<$<COMPILE_LANGUAGE:CUDA>:-gencode arch=compute_50,code=sm_50>
 )
 
-CONAN_TARGET_LINK_LIBRARIES(${PROJECT_NAME})
-
 TARGET_LINK_LIBRARIES( ${PROJECT_NAME}
 	ApplicationTimer
 	Environment
 	ShapeFromSilhouette_Common
+	CONAN_PKG::Geometry
+	CONAN_PKG::Roi3DF
+	CONAN_PKG::boost_filesystem
+	CONAN_PKG::libzip
+	CONAN_PKG::opencv
 )
 
 SOURCE_GROUP( "Header Files\\Cuda" FILES ${CUDA_INCS} )

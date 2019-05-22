@@ -2,9 +2,6 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
 
 PROJECT( Fusion )
 
-INCLUDE(${CMAKE_CURRENT_BINARY_DIR}/conanbuildinfo.cmake)
-CONAN_BASIC_SETUP()
-
 MESSAGE("Flags ${PROJECT_NAME}:")
 SHOW_CMAKE_CXX_FLAGS()
 
@@ -14,7 +11,13 @@ FIND_PACKAGE( Qt5Gui )
 SET( CMAKE_AUTOMOC ON )
 
 INCLUDE_DIRECTORIES(
-	${LIB_INCLUDE_DIRS}
+	../include
+	../../environment/include
+	../../shape_from_silhouette_common/include
+	../../sparsity_driven_detector/include
+	../../timer/include
+	../../unreal_input/include
+	../../utility/include
 	${CMAKE_CURRENT_BINARY_DIR}
 )
 
@@ -32,16 +35,23 @@ ADD_LIBRARY(${PROJECT_NAME} STATIC
 )
 
 TARGET_LINK_LIBRARIES(${PROJECT_NAME}
+	ApplicationTimer
+	Environment
+	ShapeFromSilhouette_Common
+	SparsityDrivenDetector
+	UnrealInput
 	Qt5::Core
 	Qt5::Gui
-	SparsityDrivenDetector
-	Environment
-	UnrealInput
-	ApplicationTimer
-	ShapeFromSilhouette_Common
+	CONAN_PKG::CPLEX
+	CONAN_PKG::Geometry
+	CONAN_PKG::Roi3DF
+	CONAN_PKG::boost_filesystem
+	CONAN_PKG::boost_program_options
+	CONAN_PKG::ffmpeg
+	CONAN_PKG::libzip
+	CONAN_PKG::opencv
+	CONAN_PKG::sqlite3
 )
-
-CONAN_TARGET_LINK_LIBRARIES(${PROJECT_NAME})
 
 SET_PROPERTY( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Algorithms" )
 

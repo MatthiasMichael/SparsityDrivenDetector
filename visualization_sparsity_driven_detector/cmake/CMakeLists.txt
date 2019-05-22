@@ -2,9 +2,6 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
 
 PROJECT( Visualization_SparsityDrivenDetector )
 
-INCLUDE(${CMAKE_CURRENT_BINARY_DIR}/conanbuildinfo.cmake)
-CONAN_BASIC_SETUP()
-
 MESSAGE("Flags ${PROJECT_NAME}:")
 SHOW_CMAKE_CXX_FLAGS()
 
@@ -14,7 +11,12 @@ FIND_PACKAGE( Qt5Gui )
 FIND_PACKAGE( Qt5OpenGL )
 
 INCLUDE_DIRECTORIES(
-	${LIB_INCLUDE_DIRS}
+	../include
+	../../environment/include
+	../../sparsity_driven_detector/include
+	../../timer/include
+	../../utility/include
+	../../visualization_environment/include
 )
 
 SET( INCLUDE_FILES
@@ -33,19 +35,25 @@ ADD_LIBRARY( ${PROJECT_NAME} STATIC
 	${SOURCE_FILES}
 )
 
-CONAN_TARGET_LINK_LIBRARIES(${PROJECT_NAME})
 
 TARGET_LINK_LIBRARIES( ${PROJECT_NAME}
+	ApplicationTimer
+	Environment
+	SparsityDrivenDetector
+	Visualization_Environment
+	Glu32
+	Opengl32
 	Qt5::Core
 	Qt5::Widgets
 	Qt5::Gui
 	Qt5::OpenGL
-	Glu32
-	Opengl32
-	Environment
-	ApplicationTimer
-	SparsityDrivenDetector
-	Visualization_Environment
+	CONAN_PKG::Geometry
+	CONAN_PKG::Roi3DF
+	CONAN_PKG::boost_filesystem
+	CONAN_PKG::libzip
+	CONAN_PKG::OsgVisualization
+	CONAN_PKG::opencv
+	CONAN_PKG::CPLEX
 )
 
 SET_PROPERTY( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Visualization" )

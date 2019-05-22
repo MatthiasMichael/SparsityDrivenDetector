@@ -2,14 +2,13 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
 
 PROJECT( ShapeFromSilhouette_Common )
 
-INCLUDE(${CMAKE_CURRENT_BINARY_DIR}/conanbuildinfo.cmake)
-CONAN_BASIC_SETUP()
-
 MESSAGE("Flags ${PROJECT_NAME}:")
 SHOW_CMAKE_CXX_FLAGS()
 
 INCLUDE_DIRECTORIES(
-	${LIB_INCLUDE_DIRS}
+	../include
+	../../environment/include
+	../../utility/include
 )
 
 SET( INCLUDE_FILES
@@ -36,9 +35,11 @@ ADD_LIBRARY(${PROJECT_NAME} STATIC
 
 TARGET_LINK_LIBRARIES(${PROJECT_NAME}
 	Environment
+	CONAN_PKG::Geometry
+	CONAN_PKG::Roi3DF
+	CONAN_PKG::boost_filesystem
+	CONAN_PKG::libzip
 )
-
-CONAN_TARGET_LINK_LIBRARIES(${PROJECT_NAME})
 
 SET_PROPERTY( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Algorithms/ShapeFromSilhouette" )
 
