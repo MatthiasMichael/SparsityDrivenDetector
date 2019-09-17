@@ -2,8 +2,12 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
 
 PROJECT( Visualization_Fusion )
 
-MESSAGE("Flags ${PROJECT_NAME}:")
-SHOW_CMAKE_CXX_FLAGS()
+IF( ${VERBOSE_CONFIGURE} )
+	MESSAGE("Flags ${PROJECT_NAME}:")
+	SHOW_CMAKE_CXX_FLAGS()
+ENDIF()
+
+FIND_PACKAGE( CPLEX )
 
 FIND_PACKAGE( Qt5Core )
 FIND_PACKAGE( Qt5Widgets )
@@ -21,6 +25,7 @@ INCLUDE_DIRECTORIES(
 	../../utility/include
 	../../visualization_environment/include
 	../../visualization_shape_from_silhouette/include
+	${CPLEX_INCLUDE_DIRS}
 	${CMAKE_CURRENT_BINARY_DIR}
 )
 
@@ -58,7 +63,7 @@ TARGET_LINK_LIBRARIES( ${PROJECT_NAME}
 	CONAN_PKG::libzip
 	CONAN_PKG::OsgVisualization
 	CONAN_PKG::opencv
-	CONAN_PKG::CPLEX
+	${CPLEX_LIBRARIES}
 )
 
 SET_PROPERTY( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Visualization" )

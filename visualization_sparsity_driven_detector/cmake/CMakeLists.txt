@@ -2,8 +2,12 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
 
 PROJECT( Visualization_SparsityDrivenDetector )
 
-MESSAGE("Flags ${PROJECT_NAME}:")
-SHOW_CMAKE_CXX_FLAGS()
+IF( ${VERBOSE_CONFIGURE} )
+	MESSAGE("Flags ${PROJECT_NAME}:")
+	SHOW_CMAKE_CXX_FLAGS()
+ENDIF()
+
+FIND_PACKAGE( CPLEX )
 
 FIND_PACKAGE( Qt5Core )
 FIND_PACKAGE( Qt5Widgets )
@@ -17,6 +21,7 @@ INCLUDE_DIRECTORIES(
 	../../timer/include
 	../../utility/include
 	../../visualization_environment/include
+	${CPLEX_INCLUDE_DIRS}
 )
 
 SET( INCLUDE_FILES
@@ -53,7 +58,7 @@ TARGET_LINK_LIBRARIES( ${PROJECT_NAME}
 	CONAN_PKG::libzip
 	CONAN_PKG::OsgVisualization
 	CONAN_PKG::opencv
-	CONAN_PKG::CPLEX
+	${CPLEX_LIBRARIES}
 )
 
 SET_PROPERTY( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Visualization" )

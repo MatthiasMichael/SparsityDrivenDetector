@@ -2,8 +2,12 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
 
 PROJECT( Executables )
 
-MESSAGE("Flags ${PROJECT_NAME}:")
-SHOW_CMAKE_CXX_FLAGS()
+IF( ${VERBOSE_CONFIGURE} )
+	MESSAGE("Flags ${PROJECT_NAME}:")
+	SHOW_CMAKE_CXX_FLAGS()
+ENDIF()
+
+FIND_PACKAGE( CPLEX )
 
 FIND_PACKAGE( Qt5Core )
 FIND_PACKAGE( Qt5Widgets )
@@ -28,6 +32,7 @@ INCLUDE_DIRECTORIES(
 	../../visualization_fusion/include
 	../../visualization_shape_from_silhouette/include
 	../../visualization_sparsity_driven_detector/include
+	${CPLEX_INCLUDE_DIRS}
 	${CMAKE_CURRENT_BINARY_DIR}
 )
 
@@ -74,7 +79,6 @@ SET( COMMON_LIBRARIES
 	Qt5::OpenGL
 	Qt5::Widgets
 	Qt5::Sql
-	CONAN_PKG::CPLEX
 	CONAN_PKG::Geometry
 	CONAN_PKG::OsgVisualization
 	CONAN_PKG::Roi3DF
@@ -84,6 +88,7 @@ SET( COMMON_LIBRARIES
 	CONAN_PKG::libzip
 	CONAN_PKG::opencv
 	CONAN_PKG::sqlite3
+	${CPLEX_LIBRARIES}
 )
 
 MACRO(ADD_EXE_PROJECT EXE_PROJECT_NAME)
@@ -137,3 +142,7 @@ FOREACH(item IN LISTS RESOURCE_FILENAMES)
     )
 ENDFOREACH()
 
+FILE(
+    COPY ${CPLEX_SHARED_LIB}
+    DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
+)

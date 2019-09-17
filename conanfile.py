@@ -6,7 +6,6 @@ class SparsityDrivenDetectorConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     generators = "cmake"
     requires = \
-        "CPLEX/12.7.1@MatthiasMichael/stable", \
         "Geometry/1.0@MatthiasMichael/stable", \
         "OpenSSL/1.0.2r@conan/stable", \
         "OsgVisualization/1.0@MatthiasMichael/stable", \

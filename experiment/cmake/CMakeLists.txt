@@ -2,8 +2,12 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
 
 PROJECT( Experiment )
 
-MESSAGE("Flags ${PROJECT_NAME}:")
-SHOW_CMAKE_CXX_FLAGS()
+IF( ${VERBOSE_CONFIGURE} )
+	MESSAGE("Flags ${PROJECT_NAME}:")
+	SHOW_CMAKE_CXX_FLAGS()
+ENDIF()
+
+FIND_PACKAGE( CPLEX )
 
 FIND_PACKAGE( Qt5Core )
 FIND_PACKAGE( Qt5Widgets )
@@ -29,6 +33,7 @@ INCLUDE_DIRECTORIES(
 	../../visualization_fusion/include
 	../../visualization_shape_from_silhouette/include
 	../../visualization_sparsity_driven_detector/include
+	${CPLEX_INCLUDE_DIRS}
 	${CMAKE_CURRENT_BINARY_DIR}
 )
 
@@ -90,7 +95,6 @@ TARGET_LINK_LIBRARIES(${PROJECT_NAME}
 	Qt5::OpenGL
 	Qt5::Widgets
 	Qt5::Sql
-	CONAN_PKG::CPLEX
 	CONAN_PKG::Geometry
 	CONAN_PKG::OsgVisualization
 	CONAN_PKG::Roi3DF
@@ -100,6 +104,7 @@ TARGET_LINK_LIBRARIES(${PROJECT_NAME}
 	CONAN_PKG::libzip
 	CONAN_PKG::opencv
 	CONAN_PKG::sqlite3
+	${CPLEX_LIBRARIES}
 )
 
 SET_PROPERTY( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Application" )
