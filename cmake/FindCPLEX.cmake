@@ -16,12 +16,28 @@ if(WIN32)
     if(NOT CPLEX_STUDIO_DIR_VAR)
         MESSAGE(FATAL_ERROR "Unable to find CPLEX: environment variable CPLEX_STUDIO_DIR<VERSION> not set.")
     endif()
+    
+    # If we have multiple CPLEX Versions installed we get multiple lines. 
+    # We try to find the most recent one
+    SET(LAST_NEWLINE_IDX -1)
+    STRING( FIND ${CPLEX_STUDIO_DIR_VAR} "\n" LAST_NEWLINE_IDX REVERSE)
+    IF( NOT ${LAST_NEWLINE_IDX} STREQUAL "-1" )
+        STRING(SUBSTRING ${CPLEX_STUDIO_DIR_VAR} ${LAST_NEWLINE_IDX} "-1" CPLEX_STUDIO_DIR_VAR)
+        STRING(STRIP ${CPLEX_STUDIO_DIR_VAR} CPLEX_STUDIO_DIR_VAR)
+    ENDIF()
 
     STRING(REGEX REPLACE "^CPLEX_STUDIO_DIR" "" CPLEX_STUDIO_DIR_VAR ${CPLEX_STUDIO_DIR_VAR})
     STRING(REGEX MATCH "^[0-9]+" CPLEX_WIN_VERSION ${CPLEX_STUDIO_DIR_VAR})
     STRING(REGEX REPLACE "^[0-9]+=" "" CPLEX_STUDIO_DIR_VAR ${CPLEX_STUDIO_DIR_VAR})
-	
+    
     file(TO_CMAKE_PATH "${CPLEX_STUDIO_DIR_VAR}" CPLEX_ROOT_DIR_GUESS)
+    
+    # Append 0 if the verison length is 3 (sorry for the hack)
+    set(CPLEX_WIN_VERSION_LENGTH 0)
+    STRING(LENGTH ${CPLEX_WIN_VERSION} CPLEX_WIN_VERSION_LENGTH)
+    IF(${CPLEX_WIN_VERSION_LENGTH} STREQUAL "3")
+        SET(CPLEX_WIN_VERSION "${CPLEX_WIN_VERSION}0")
+    ENDIF()
 
     set(CPLEX_WIN_VERSION ${CPLEX_WIN_VERSION} CACHE STRING "CPLEX version to be used.")
     set(CPLEX_ROOT_DIR "${CPLEX_ROOT_DIR_GUESS}" CACHE PATH "CPLEX root directory.")
@@ -31,8 +47,6 @@ if(WIN32)
     STRING(REGEX REPLACE "/VC/bin/.*" "" VISUAL_STUDIO_PATH ${CMAKE_C_COMPILER})
     STRING(REGEX MATCH "Studio [0-9]+" CPLEX_WIN_VS_VERSION ${VISUAL_STUDIO_PATH})
     STRING(REGEX REPLACE "Studio " "" CPLEX_WIN_VS_VERSION ${CPLEX_WIN_VS_VERSION})
-
-    #MESSAGE("VER: ${CPLEX_WIN_VS_VERSION}")
 
     if(${CPLEX_WIN_VS_VERSION} STREQUAL "9")
         set(CPLEX_WIN_VS_VERSION 2008)
@@ -48,8 +62,6 @@ if(WIN32)
         else()
             set(CPLEX_WIN_VS_VERSION 2017)
         endif()
-    elseif(${CPLEX_WIN_VS_VERSION} STREQUAL "16")
-        set(CPLEX_WIN_VS_VERSION 2019)
     else()
         MESSAGE(FATAL_ERROR "CPLEX: unknown Visual Studio version at '${VISUAL_STUDIO_PATH}'.")
     endif()
@@ -72,6 +84,8 @@ if(WIN32)
 
     # now, generate platform string
     set(CPLEX_WIN_PLATFORM "${CPLEX_WIN_BITNESS}_windows_vs${CPLEX_WIN_VS_VERSION}/stat_${CPLEX_WIN_LINKAGE}")
+    
+    #MESSAGE("WPF: ${CPLEX_WIN_PLATFORM}")
 
 else()
 
@@ -79,7 +93,6 @@ else()
     set(CPLEX_WIN_PLATFORM "")
 
 endif()
-
 
 FIND_PATH(CPLEX_INCLUDE_DIR
         ilcplex/cplex.h
