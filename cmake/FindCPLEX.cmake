@@ -78,12 +78,8 @@ if(WIN32)
 
     #MESSAGE(STATUS "CPLEX: using Visual Studio ${CPLEX_WIN_VS_VERSION} ${CPLEX_WIN_BITNESS} at '${VISUAL_STUDIO_PATH}'")
 
-    if(NOT CPLEX_WIN_LINKAGE)
-        set(CPLEX_WIN_LINKAGE mda CACHE STRING "CPLEX linkage variant on Windows. One of these: mda (dll, release), mdd (dll, debug), mta (static, release), mtd (static, debug)")
-    endif(NOT CPLEX_WIN_LINKAGE)
-
     # now, generate platform string
-    set(CPLEX_WIN_PLATFORM "${CPLEX_WIN_BITNESS}_windows_vs${CPLEX_WIN_VS_VERSION}/stat_${CPLEX_WIN_LINKAGE}")
+    set(CPLEX_WIN_PLATFORM "${CPLEX_WIN_BITNESS}_windows_vs${CPLEX_WIN_VS_VERSION}/stat_")
     
     #MESSAGE("WPF: ${CPLEX_WIN_PLATFORM}")
 
@@ -112,9 +108,21 @@ FIND_PATH(CPLEX_CONCERT_INCLUDE_DIR
         ENV INCLUDE_PATH
         )
 
-FIND_LIBRARY(CPLEX_LIBRARY
+FIND_LIBRARY(CPLEX_LIBRARY_RELEASE
         NAMES cplex${CPLEX_WIN_VERSION} cplex
-        HINTS ${CPLEX_ROOT_DIR}/cplex/lib/${CPLEX_WIN_PLATFORM} #windows
+        HINTS ${CPLEX_ROOT_DIR}/cplex/lib/${CPLEX_WIN_PLATFORM}mda #windows
+        ${CPLEX_ROOT_DIR}/cplex/lib/x86-64_debian4.0_4.1/static_pic #unix
+        ${CPLEX_ROOT_DIR}/cplex/lib/x86-64_sles10_4.1/static_pic #unix 
+        ${CPLEX_ROOT_DIR}/cplex/lib/x86-64_linux/static_pic #unix 
+        ${CPLEX_ROOT_DIR}/cplex/lib/x86-64_osx/static_pic #osx 
+        ${CPLEX_ROOT_DIR}/cplex/lib/x86-64_darwin/static_pic #osx 
+        PATHS ENV LIBRARY_PATH #unix
+        ENV LD_LIBRARY_PATH #unix
+        )
+
+FIND_LIBRARY(CPLEX_LIBRARY_DEBUG
+        NAMES cplex${CPLEX_WIN_VERSION} cplex
+        HINTS ${CPLEX_ROOT_DIR}/cplex/lib/${CPLEX_WIN_PLATFORM}mdd #windows
         ${CPLEX_ROOT_DIR}/cplex/lib/x86-64_debian4.0_4.1/static_pic #unix
         ${CPLEX_ROOT_DIR}/cplex/lib/x86-64_sles10_4.1/static_pic #unix 
         ${CPLEX_ROOT_DIR}/cplex/lib/x86-64_linux/static_pic #unix 
@@ -126,9 +134,21 @@ FIND_LIBRARY(CPLEX_LIBRARY
 
 #message(STATUS "CPLEX Library: ${CPLEX_LIBRARY}")
 
-FIND_LIBRARY(CPLEX_ILOCPLEX_LIBRARY
+FIND_LIBRARY(CPLEX_ILOCPLEX_LIBRARY_RELEASE
         ilocplex
-        HINTS ${CPLEX_ROOT_DIR}/cplex/lib/${CPLEX_WIN_PLATFORM} #windows
+        HINTS ${CPLEX_ROOT_DIR}/cplex/lib/${CPLEX_WIN_PLATFORM}mda #windows
+        ${CPLEX_ROOT_DIR}/cplex/lib/x86-64_debian4.0_4.1/static_pic #unix 
+        ${CPLEX_ROOT_DIR}/cplex/lib/x86-64_sles10_4.1/static_pic #unix 
+        ${CPLEX_ROOT_DIR}/cplex/lib/x86-64_linux/static_pic #unix 
+        ${CPLEX_ROOT_DIR}/cplex/lib/x86-64_osx/static_pic #osx 
+        ${CPLEX_ROOT_DIR}/cplex/lib/x86-64_darwin/static_pic #osx 
+        PATHS ENV LIBRARY_PATH
+        ENV LD_LIBRARY_PATH
+        )
+		
+FIND_LIBRARY(CPLEX_ILOCPLEX_LIBRARY_DEBUG
+        ilocplex
+        HINTS ${CPLEX_ROOT_DIR}/cplex/lib/${CPLEX_WIN_PLATFORM}mdd #windows
         ${CPLEX_ROOT_DIR}/cplex/lib/x86-64_debian4.0_4.1/static_pic #unix 
         ${CPLEX_ROOT_DIR}/cplex/lib/x86-64_sles10_4.1/static_pic #unix 
         ${CPLEX_ROOT_DIR}/cplex/lib/x86-64_linux/static_pic #unix 
@@ -140,9 +160,21 @@ FIND_LIBRARY(CPLEX_ILOCPLEX_LIBRARY
 
 #message(STATUS "ILOCPLEX Library: ${CPLEX_ILOCPLEX_LIBRARY}")
 
-FIND_LIBRARY(CPLEX_CONCERT_LIBRARY
+FIND_LIBRARY(CPLEX_CONCERT_LIBRARY_RELEASE
         concert
-        HINTS ${CPLEX_ROOT_DIR}/concert/lib/${CPLEX_WIN_PLATFORM} #windows
+        HINTS ${CPLEX_ROOT_DIR}/concert/lib/${CPLEX_WIN_PLATFORM}mda #windows
+        ${CPLEX_ROOT_DIR}/concert/lib/x86-64_debian4.0_4.1/static_pic #unix 
+        ${CPLEX_ROOT_DIR}/concert/lib/x86-64_sles10_4.1/static_pic #unix 
+        ${CPLEX_ROOT_DIR}/concert/lib/x86-64_linux/static_pic #unix 
+        ${CPLEX_ROOT_DIR}/concert/lib/x86-64_osx/static_pic #osx 
+        ${CPLEX_ROOT_DIR}/concert/lib/x86-64_darwin/static_pic #osx 
+        PATHS ENV LIBRARY_PATH
+        ENV LD_LIBRARY_PATH
+        )
+
+FIND_LIBRARY(CPLEX_CONCERT_LIBRARY_DEBUG
+        concert
+        HINTS ${CPLEX_ROOT_DIR}/concert/lib/${CPLEX_WIN_PLATFORM}mdd #windows
         ${CPLEX_ROOT_DIR}/concert/lib/x86-64_debian4.0_4.1/static_pic #unix 
         ${CPLEX_ROOT_DIR}/concert/lib/x86-64_sles10_4.1/static_pic #unix 
         ${CPLEX_ROOT_DIR}/concert/lib/x86-64_linux/static_pic #unix 
@@ -183,7 +215,7 @@ FIND_PACKAGE_HANDLE_STANDARD_ARGS(CPLEX DEFAULT_MSG
 
 IF(CPLEX_FOUND)
     SET(CPLEX_INCLUDE_DIRS ${CPLEX_INCLUDE_DIR} ${CPLEX_CONCERT_INCLUDE_DIR})
-    SET(CPLEX_LIBRARIES ${CPLEX_CONCERT_LIBRARY} ${CPLEX_ILOCPLEX_LIBRARY} ${CPLEX_LIBRARY} )
+    SET(CPLEX_LIBRARIES ${CPLEX_CONCERT_LIBRARY_RELEASE} ${CPLEX_ILOCPLEX_LIBRARY_RELEASE} ${CPLEX_LIBRARY_RELEASE} )
     IF(CMAKE_SYSTEM_NAME STREQUAL "Linux")
         SET(CPLEX_LIBRARIES "${CPLEX_LIBRARIES};m;pthread")
     ENDIF(CMAKE_SYSTEM_NAME STREQUAL "Linux")
