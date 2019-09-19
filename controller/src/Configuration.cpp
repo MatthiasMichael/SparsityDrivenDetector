@@ -23,7 +23,7 @@ boost::program_options::options_description getCommandLineOptions()
 	options_description commandLineOptions("Command Line Options");
 	commandLineOptions.add_options()
 		("help,h", "Show help")
-		("config,c", value<std::string>()->default_value("settings.ini"), "Name of the configuration file");
+		("config,c", value<std::string>()->default_value("res/settings.ini"), "Name of the configuration file");
 
 	return commandLineOptions;
 }

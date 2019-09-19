@@ -254,7 +254,14 @@ OptimizationProblem::ChangedEntries OptimizationProblem::getChangesToPreviousFra
 
 void OptimizationProblem::solveCplex()
 {
-	m_persistentCplex.solve();
+	try
+	{
+		m_persistentCplex.solve();
+	}
+	catch(const IloException & e)
+	{
+		e.print(std::cout);
+	}
 }
 
 

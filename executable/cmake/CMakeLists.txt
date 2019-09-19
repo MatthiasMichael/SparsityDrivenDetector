@@ -37,12 +37,14 @@ INCLUDE_DIRECTORIES(
 )
 
 SET( RESOURCE_FOLDER
-	../res
+	../../res
 )
 
 SET( RESOURCE_FILENAMES
+	Example.scene
 	person_01.ppm
 	person_02.ppm
+	settings.ini
 )
 
 # Build the complete path for each resource file
@@ -123,7 +125,7 @@ MACRO(ADD_EXE_PROJECT EXE_PROJECT_NAME)
 
 	ADD_CUSTOM_COMMAND(TARGET ${EXE_PROJECT_NAME} POST_BUILD
 		COMMAND "${CMAKE_COMMAND}" -E
-		env PATH="${_qt_bin_dir}" "${WINDEPLOYQT_EXECUTABLE}" "$<TARGET_FILE:${EXE_PROJECT_NAME}>" "--dir" "${CMAKE_CURRENT_BINARY_DIR}"
+		env PATH="${_qt_bin_dir}" "${WINDEPLOYQT_EXECUTABLE}" "$<TARGET_FILE:${EXE_PROJECT_NAME}>" "--no-translations"
 		COMMENT "Running windeployqt..."
 	)
 ENDMACRO(ADD_EXE_PROJECT)
