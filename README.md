@@ -81,6 +81,8 @@ TODO...
 ## Known Issues
 Currenty the build process is tuned towards Windows and Visual Studio. Conan is explicitly invoked with the cmake-multi generator to make switching between Release and Debug builds in the IDE easier. If I find the time I might try to extend this to other scenarios where a single configuration environment is desired. Help in this are is appreciated since my knowledge of conan and CMake is rather limited.
 
+Only Debug and Release configurations are working which is due to the cmake-multi generator of conan. It does not automatically install Release dependencies for the RelWithDebInfo configuration (which is what you might expect from the Windows environment). Instead it tries to get build all debencies with `build_type=RelWithDebInfo` which is just not supported by some of the packages and results in a failure.
+
 The code itself should be rather platform independent except for the class `WindowsConsoleListener` which would have to be replaced with one for the corresponding platform. Other than that some (but hopefully not that many) non-standard idioms specific to the MSVC compiler might be present.
 
 You need a fully licensed copy of CPLEX. The trial version has limits on the number of variables and constraints per optimization model. And the models of the SparsityDrivenDetector are way to huge for that. The structure of the project however should allow to exchange the optimizer for a different open source one at some point.
