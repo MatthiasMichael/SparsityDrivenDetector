@@ -56,7 +56,7 @@ To make each package of the list NamedType, Geometry, Parametrizable, OsgVisuali
     git clone https://github.com/MatthiasMichael/<package>.git
     cd <package>
     conan export . MatthiasMichael/stable
-    conan install <package>/1.0@MatthiasMichael/stable -- build missing
+    conan install <package>/1.0@MatthiasMichael/stable --build missing
     
 Then clone this repository and invoke CMake in your preferred way.
 
