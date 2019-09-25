@@ -79,10 +79,22 @@ Typing `h` in the command line displays a list of available commands.
 TODO...
 
 ## Known Issues
+### Build only works with Visual Studio
 Currenty the build process is tuned towards Windows and Visual Studio. Conan is explicitly invoked with the cmake-multi generator to make switching between Release and Debug builds in the IDE easier. If I find the time I might try to extend this to other scenarios where a single configuration environment is desired. Help in this are is appreciated since my knowledge of conan and CMake is rather limited.
 
+### Cannot build in RelWithDebInfo configuration
 Only Debug and Release configurations are working which is due to the cmake-multi generator of conan. It does not automatically install Release dependencies for the RelWithDebInfo configuration (which is what you might expect from the Windows environment). Instead it tries to get build all debencies with `build_type=RelWithDebInfo` which is just not supported by some of the packages and results in a failure.
 
+### Some parts of the code are windows specific
 The code itself should be rather platform independent except for the class `WindowsConsoleListener` which would have to be replaced with one for the corresponding platform. Other than that some (but hopefully not that many) non-standard idioms specific to the MSVC compiler might be present.
 
-You need a fully licensed copy of CPLEX. The trial version has limits on the number of variables and constraints per optimization model. And the models of the SparsityDrivenDetector are way to huge for that. The structure of the project however should allow to exchange the optimizer for a different open source one at some point.
+### Trial version of CPLEX is not sufficient
+You need a fully licensed copy of CPLEX. The trial version has limits on the number of variables and constraints per optimization model. And the models of the SparsityDrivenDetector are way to huge for that. 
+Apparently IBM currently has problems distributing the academic version of CPLEX. If that problem persists we will look into providing alternative optimizers (like Gurobi or other open source libraries)
+
+### Build requires exactly CUDA 10 and Visual Studio 2017
+We make use of several C++17 features that are not available in older versions of visual Visual Studio. However older CUDA versions do not support VS 2017 (CMake reports a missing toolchain). This also means that you currently cannot build this project for GPUs with Fermi architecture and older (like GeForce 400, 500, 600, GT-630) since they require SM20 which has been removed since CUDA 9.
+These version mismatches are a mess we were not aware of during development since we thankfully had fairly new hardware. Maybe we'll look into adapting the code to make it buildable with VS 2015.
+
+### CUDA compile options are set to -gencode arch=compute_50,code=sm_50
+This is the lowest option allowed by CUDA 10 and should be supported by most modern GPUs. In theory it should be possible to instruct NVCC to compile for multiple target platforms at once. A problem with CMake generator expressions however prohibits that. If you need another target architecture you have to change line 62 of `shape_from_silhouette_cuda/cmake/CMakeLists.txt`
